@@ -1,75 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
-    android:elevation="10dp"
-    android:radius="12dp"
-    >
+    android:layout_margin="10dp"
+    android:backgroundTint="@color/white"
+    app:cardElevation="4dp"
+    android:radius="10dp"
+    app:cardCornerRadius="10dp">
 
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp"
-        android:background="@drawable/rounded_background"
-        android:clipToPadding="false">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- Test Name with Icon -->
+        <!-- Icon, Test Name, and Price -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/rounded_background"
-            android:gravity="start|center_vertical">
+            android:layout_marginBottom="12dp">
 
+            <!-- Test Icon -->
             <ImageView
                 android:id="@+id/iconTest"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_test"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_alignParentStart="true"
                 android:layout_marginEnd="12dp"
-                android:contentDescription="Test Icon" />
+                android:contentDescription="Test Icon"
+                android:src="@drawable/ic_test" />
 
-
+            <!-- Test Name -->
             <TextView
                 android:id="@+id/tvTestName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Test Name"
-                android:textSize="20sp"
-                android:textColor="@color/primaryDark"
-                android:textStyle="bold"
                 android:layout_toEndOf="@id/iconTest"
                 android:ellipsize="end"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:text="Test Name"
+                android:textColor="@color/primaryDark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
+            <!-- Test Price -->
+            <TextView
+                android:id="@+id/tvTestPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                android:text="Price: $100"
+                android:textColor="@color/primaryColor"
+                android:textSize="16sp" />
         </RelativeLayout>
 
-        <!-- Test Price -->
-        <TextView
-            android:id="@+id/tvTestPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Price: $100"
-            android:textSize="16sp"
-            android:textColor="@color/primaryColor"
-            android:layout_marginBottom="8dp"
-            android:gravity="start"/>
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="12dp"
+            android:background="@color/blue" />
 
         <!-- Test Requirements -->
-        <TextView
-            android:id="@+id/tvTestRequirements"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Requirements: Test procedure"
-            android:textSize="14sp"
-            android:textColor="@color/LightText"
-            android:gravity="start"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp">
 
+            <!-- Requirements Icon -->
+            <ImageView
+                android:id="@+id/iconRequirements"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="Requirements Icon"
+                android:src="@drawable/ic_helpnsupp" />
+
+            <!-- Test Requirements -->
+            <TextView
+                android:id="@+id/tvTestRequirements"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/iconRequirements"
+                android:lineSpacingExtra="4dp"
+                android:text="Requirements: Test procedure"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <!-- Availability Section -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Availability Icon -->
+            <ImageView
+                android:id="@+id/iconAvailability"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="Availability Icon"
+                android:src="@drawable/ic_availaibilty" />
+
+            <TextView
+                android:id="@+id/tvAvailability"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/iconAvailability"
+                android:text="Availability: 24/7"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </RelativeLayout>
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

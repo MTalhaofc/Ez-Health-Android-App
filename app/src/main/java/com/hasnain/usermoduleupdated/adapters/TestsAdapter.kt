@@ -29,6 +29,7 @@ class TestsAdapter(private val testsList: List<Tests>) : RecyclerView.Adapter<Te
             binding.tvTestName.text = test.test_name
             binding.tvTestPrice.text = "Price: ${test.test_price}"
             binding.tvTestRequirements.text = "Requirements: ${test.test_requirments}"
+            binding.tvAvailability.text = "Availability: ${test.test_availability}"
         }
     }
 }

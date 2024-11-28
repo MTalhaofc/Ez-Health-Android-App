@@ -34,7 +34,7 @@ class NewsViewModel : ViewModel() {
                 response?.articles?.let {
                     // Filter out articles that do not have an author
                     val filteredArticles = it.filter { article -> !article.author.isNullOrEmpty() }
-                    _articles.postValue(filteredArticles.take(3)) // Pass only the top 3 articles
+                    _articles.postValue(filteredArticles) // Pass all the filtered articles
                 }
             }
 
@@ -42,11 +42,12 @@ class NewsViewModel : ViewModel() {
                 // Log detailed error message and stack trace for easier debugging
                 if (throwable != null) {
                     Log.e("NewsAPI", "Response Failed: ${throwable.localizedMessage}")
-                    throwable.printStackTrace()  // This will provide more insights into the failure
+                    throwable.printStackTrace() // This will provide more insights into the failure
                 } else {
                     Log.e("NewsAPI", "Unknown error occurred while fetching articles.")
                 }
             }
         })
     }
+
 }

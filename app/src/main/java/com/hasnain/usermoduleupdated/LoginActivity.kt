@@ -178,7 +178,7 @@ class LoginActivity : AppCompatActivity() {
         val textViewMessage = dialogView.findViewById<TextView>(R.id.text_message)
 
         // Load the animation from the assets folder
-        lottieAnimation.setAnimation("Animation_1732636454630.json")
+        lottieAnimation.setAnimation("Animation_1732726453432.json")
         lottieAnimation.playAnimation()
         textViewMessage.text = message
 

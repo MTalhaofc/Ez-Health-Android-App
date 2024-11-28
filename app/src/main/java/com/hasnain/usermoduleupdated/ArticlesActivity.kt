@@ -8,16 +8,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hasnain.usermoduleupdated.adapters.ArticlesAdapter
+import com.hasnain.usermoduleupdated.databinding.ActivityAppointmentBinding
+import com.hasnain.usermoduleupdated.databinding.ActivityArticlesBinding
 import com.hasnain.usermoduleupdated.models.NewsViewModel
 
 class ArticlesActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityArticlesBinding
 
     private lateinit var articlesAdapter: ArticlesAdapter
     private lateinit var newsViewModel: NewsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_articles)
+        binding = ActivityArticlesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Initialize the NewsViewModel
         newsViewModel = ViewModelProvider(this).get(NewsViewModel::class.java)
@@ -43,5 +47,9 @@ class ArticlesActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.url))
             startActivity(intent)
         }
+    binding.imgBack.setOnClickListener{
+        startActivity(Intent(this,MainActivity::class.java))
     }
+    }
+
 }

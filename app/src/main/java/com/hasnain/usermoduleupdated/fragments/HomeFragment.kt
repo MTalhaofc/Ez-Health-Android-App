@@ -105,7 +105,9 @@ class HomeFragment : Fragment() {
         articlesAdapter = ArticlesAdapter()  // Initialize the ArticlesAdapter
 
         // Set the adapter to the RecyclerView
-        binding.newsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.newsRecyclerView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
+        // Initialize the RecyclerView
+
         binding.newsRecyclerView.adapter = articlesAdapter
 
         // Observe the articles LiveData from NewsViewModel
@@ -199,4 +201,6 @@ class HomeFragment : Fragment() {
         handler.removeCallbacks(slideRunnable)
         _binding = null
     }
+    // Initialize the RecyclerView
+
 }
