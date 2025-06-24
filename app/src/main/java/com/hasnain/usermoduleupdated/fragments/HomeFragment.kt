@@ -3,18 +3,19 @@ package com.hasnain.usermoduleupdated.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,9 +23,12 @@ import com.google.firebase.database.ValueEventListener
 import com.hasnain.usermoduleupdated.*
 import com.hasnain.usermoduleupdated.adapters.ArticlesAdapter
 import com.hasnain.usermoduleupdated.adapters.HomeViewPagerAdapter
+import com.hasnain.usermoduleupdated.adapters.SliderAdapter
 import com.hasnain.usermoduleupdated.databinding.FragmentHomeBinding
 import com.hasnain.usermoduleupdated.models.NewsViewModel
 import com.hasnain.usermoduleupdated.models.Profile
+import com.hasnain.usermoduleupdated.models.SliderItem
+import com.hasnain.usermoduleupdated.utils.DepthScaleTransformer
 import com.hasnain.usermoduleupdated.utils.FirebaseHelper
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -55,14 +59,58 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         // Initialize ViewPager with sliders
-        val fragmentList = arrayListOf<Fragment>(
-            SliderFragment.newInstance(R.drawable.dr_image, "Healthy Up", "Find a doctor easily from your phone"),
-            SliderFragment.newInstance(R.drawable.dr_image2, "Stay Healthy", "Track your health and appointments easily"),
-            SliderFragment.newInstance(R.drawable.dr_image3, "Contact us", "Track your health and appointments easily")
+        val items = listOf(
+            SliderItem(
+                "Track Your Health",
+                "Get AI recommendations instantly from your reports.",
+                "Get Suggestions",
+                R.drawable.bg_slider_card
+            ),
+            SliderItem(
+                "Home Testing Service",
+                "Making it easy for you to give blood sample from home",
+                "Book Appointment",
+                R.drawable.bg_gradient_blue
+            ),
+            SliderItem(
+                "Healthy Lifestyle",
+                "Check Available Tests in our Lab",
+                "Tests",
+                R.drawable.bg_gradient_green
+            )
         )
-        adapter = HomeViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
-        _binding?.viewPager?.adapter = adapter
-        handler.postDelayed(slideRunnable, slideInterval)
+
+        val adapter = SliderAdapter(this, items) { position ->
+            when (position) {
+                0 -> startActivity(Intent(requireActivity(), ReportAnalysisActivity::class.java))
+                1 -> startActivity(Intent(requireActivity(), BookedAppointmentActivity::class.java))
+                2 -> startActivity(Intent(requireActivity(), TestAvailableActivity::class.java))
+            }
+        }
+
+        // Set the adapter for the ViewPager2
+        binding.viewPager.adapter = adapter
+        binding.viewPager.apply {
+            offscreenPageLimit = 4
+            clipToPadding = false
+            clipChildren = false
+
+            // Disable overscroll glow
+            (getChildAt(0) as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            (getChildAt(0) as RecyclerView).clipToPadding = false
+            (getChildAt(0) as RecyclerView).clipChildren = false
+        }
+
+// Create a composite transformer with margin + your depth scale transformer
+        val compositeTransformer = CompositePageTransformer().apply {
+            addTransformer(MarginPageTransformer(50))           // Margin between items
+            addTransformer(DepthScaleTransformer())              // Your custom transformer
+        }
+
+// Set the composite transformer (only once!)
+//        binding.viewPager.setPageTransformer(compositeTransformer)
+
+
 
         // Initialize News Section
         initializeNewsSection()
@@ -95,7 +143,7 @@ class HomeFragment : Fragment() {
                 startActivity(Intent(requireActivity(), BookedAppointmentActivity::class.java))
             }
             chatBot.setOnClickListener {
-                startActivity(Intent(requireActivity(),ChatbotActivity::class.java))
+                startActivity(Intent(requireActivity(),ReportAnalysisActivity::class.java))
             }
         }
 

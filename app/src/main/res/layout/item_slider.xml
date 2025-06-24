@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    android:elevation="4dp"
+    android:layout_gravity="center"
+    app:strokeColor="@android:color/transparent"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:layout_constraintWidth_percent="0.9">
+
+    <RelativeLayout
+        android:id="@+id/slider_background"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:background="@drawable/bg_slider_card"
+        android:padding="16dp">
+
+        <!-- Overlay -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#25000000" />
+
+        <!-- Content -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Boost Your Health"
+                android:textSize="18sp"
+                android:textColor="#FFEB3B"
+                android:fontFamily="@font/poppins_medium"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:text="Check tips daily and improve your well-being."
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/poppins_medium" />
+
+            <Button
+                android:id="@+id/btn_action"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:text="Explore Tips"
+                android:textColor="#ffffff"
+                android:textSize="13sp"
+                android:fontFamily="@font/poppins_medium"
+                android:background="@drawable/bg_btn_modern"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:elevation="3dp" />
+        </LinearLayout>
+
+        <!-- Floating Icons -->
+        <ImageView
+            android:id="@+id/icon1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_heart"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/circle_blue"
+            android:padding="5dp"
+            android:elevation="2dp" />
+
+        <ImageView
+            android:id="@+id/icon2"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_bolt"
+            android:layout_below="@id/icon1"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/circle_purple"
+            android:padding="4dp"
+            android:elevation="2dp" />
+
+        <ImageView
+            android:id="@+id/icon3"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/ic_fire"
+            android:layout_below="@id/icon2"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/circle_red"
+            android:padding="3dp"
+            android:elevation="2dp" />
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

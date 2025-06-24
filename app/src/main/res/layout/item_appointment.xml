@@ -127,7 +127,7 @@
                 <View
                     android:id="@+id/statusSubmittedLine"
                     android:layout_width="match_parent"
-                    android:layout_height="4dp"
+                    android:layout_height="10dp"
                     android:background="@color/blue"
                     android:layout_marginBottom="4dp"
                     android:layout_gravity="center_horizontal"/>
@@ -136,7 +136,7 @@
                     android:id="@+id/statusSubmitted"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Accepted"
+                    android:text="Pending"
                     android:textColor="@color/blue"
                     android:textSize="12sp"
                     android:layout_gravity="center_horizontal"/>
@@ -155,7 +155,7 @@
                 <View
                     android:id="@+id/statusShortlistedLine"
                     android:layout_width="match_parent"
-                    android:layout_height="4dp"
+                    android:layout_height="10dp"
                     android:background="@color/blue"
                     android:layout_marginBottom="4dp"
                     android:layout_gravity="center_horizontal"/>
@@ -164,7 +164,7 @@
                     android:id="@+id/statusShortlisted"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rejected"
+                    android:text="Missed"
                     android:textColor="@color/blue"
                     android:textSize="12sp"
                     android:layout_gravity="center_horizontal"/>
@@ -185,7 +185,7 @@
                 <View
                     android:id="@+id/statusOfferLine"
                     android:layout_width="match_parent"
-                    android:layout_height="4dp"
+                    android:layout_height="10dp"
                     android:background="@color/blue"
                     android:layout_marginBottom="4dp"
                     android:layout_gravity="center_horizontal"/>

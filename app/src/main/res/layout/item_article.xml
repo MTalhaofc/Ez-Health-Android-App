@@ -5,96 +5,111 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    android:padding="8dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    android:backgroundTint="@android:color/white"
+    android:padding="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="12dp">
 
         <!-- Article Image -->
         <ImageView
             android:id="@+id/articleImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/image_round"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:scaleType="centerCrop" />
-
-        <!-- Title Icon -->
-
-        <!-- Title Label -->
-        <TextView
-            android:id="@+id/articleTitleLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title:"
-            android:textStyle="bold"
-            android:layout_marginStart="2dp"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@id/articleImage"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <!-- Article Title -->
         <TextView
             android:id="@+id/articleTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
-            android:textColor="@color/black"
+            android:text="Awesome App!!"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:maxLines="1"
             android:ellipsize="end"
-            android:maxLines="2"
-            app:layout_constraintStart_toEndOf="@id/articleTitleLabel"
+            app:layout_constraintStart_toEndOf="@id/articleImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Author Icon -->
-        <ImageView
-            android:id="@+id/authorIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="2dp"
-            android:src="@drawable/ic_user"
-        app:layout_constraintStart_toEndOf="@id/articleImage"
-        app:layout_constraintTop_toBottomOf="@id/articleTitle" />
-
-        <!-- Author Label -->
+        <!-- Description -->
+        <TextView
+            android:id="@+id/articleDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Sed ut perspiciatis unde omnis iste natus error sit..."
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@id/articleTitle"
+            app:layout_constraintTop_toBottomOf="@id/articleTitle"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Author Name -->
         <TextView
             android:id="@+id/articleAuthor"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@id/authorIcon"
-            app:layout_constraintTop_toBottomOf="@id/articleTitle"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:text="Dean Jones"
+            android:textColor="#444444"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/articleTitle"
+            app:layout_constraintTop_toBottomOf="@id/articleDescription"
+            android:layout_marginTop="8dp"/>
 
-        <!-- Published At Icon -->
-        <ImageView
-            android:id="@+id/dateIcon"
-            android:layout_width="20dp"
-            android:layout_marginStart="2dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_calendar"
-        app:layout_constraintStart_toEndOf="@id/articleImage"
-        app:layout_constraintTop_toBottomOf="@id/articleAuthor" />
-
-        <!-- Published At Label -->
-
-        <!-- Published Date -->
+        <!-- Date -->
         <TextView
             android:id="@+id/articlePublishedAt"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textColor="@color/gray"
-            app:layout_constraintStart_toEndOf="@id/dateIcon"
-            app:layout_constraintTop_toBottomOf="@id/articleAuthor"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:text="20 mins ago"
+            android:textColor="#888888"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@id/articleAuthor"
+            app:layout_constraintTop_toTopOf="@id/articleAuthor"
+            android:layout_marginStart="8dp"/>
+
+        <!-- Rating Badge -->
+        <LinearLayout
+            android:id="@+id/ratingBadge"
+            android:layout_width="40dp"
+            android:layout_height="24dp"
+            android:background="@drawable/bg_rating"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/articleDescription">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_star"
+                app:tint="@android:color/white" />
+
+            <TextView
+                android:id="@+id/ratingValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.8"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"/>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

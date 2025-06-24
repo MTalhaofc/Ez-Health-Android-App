@@ -4,11 +4,17 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import com.google.firebase.auth.FirebaseAuth
@@ -20,7 +26,14 @@ import com.google.firebase.database.ValueEventListener
 import com.hasnain.usermoduleupdated.databinding.ActivityAppointmentBinding
 import com.hasnain.usermoduleupdated.models.Appointment
 import com.hasnain.usermoduleupdated.models.Profile
+import com.hasnain.usermoduleupdated.models.TimeSlot
 import com.hasnain.usermoduleupdated.utils.FirebaseHelper
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.Calendar
 import java.util.logging.Handler
 
@@ -32,46 +45,67 @@ class AppointmentActivity : AppCompatActivity() {
     private var currentAppointmentId: String? = null
     private var selectedDate: String? = null
     private var selectedTime: String? = null
+    private lateinit var spinner: Spinner
+    private lateinit var selectedTimeId: String
+    private lateinit var selectedTimeBook: String
+    private val databaseRef = FirebaseDatabase.getInstance().getReference("timeslots")
+    private val timeSlotList = mutableListOf<TimeSlot>()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAppointmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        spinner= binding.spinner
+        loadTimeSlotsFromFirebase()
+        resetTimeSlotsIfAfterMidnight()
 
-        // Initialize Firebase references
         database = FirebaseDatabase.getInstance().getReference("appointments")
         usersDatabase = FirebaseDatabase.getInstance().getReference("users") // Reference to users collection
 
-        // Date and Time selection handlers
-//        binding.buttonSelectDate.setOnClickListener { openDatePicker() }
-//        binding.buttonSelectTime.setOnClickListener { openTimePicker() }
         binding.backArrow.setOnClickListener {
             startActivity(Intent(this,MainActivity::class.java))
         }
-        binding.imgDate.setOnClickListener { openDatePicker() }
-        binding.etSelectDate.setOnClickListener { openDatePicker() }
-        binding.etSelectTime.setOnClickListener { openTimePicker() }
-        binding.imgTime.setOnClickListener { openTimePicker() }
+
 
         // Book appointment button listener
         binding.buttonBookAppointment.setOnClickListener {
             val medicalIssues = binding.editTextMedicalIssues.text.toString()
             val address = binding.editTextAddress.text.toString()
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                    val selectedSlot = timeSlotList[position]
+                    selectedTime = selectedSlot.time
+                    selectedTimeId = selectedSlot.time_id
+                    selectedTimeBook= selectedSlot.time_booked
+                    Toast.makeText(this@AppointmentActivity, "Selected: $selectedTime", Toast.LENGTH_SHORT).show()
 
-            if (selectedDate != null && selectedTime != null && medicalIssues.isNotEmpty() && address.isNotEmpty()) {
-                fetchUserCnicAndBookAppointment(medicalIssues, address)
+                    if (selectedSlot.time_booked == "NB") {
+
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
+            val selectedSpinnerValue = spinner.selectedItem?.toString()
+            Toast.makeText(this,"time selected + $selectedSpinnerValue",Toast.LENGTH_SHORT).show()
+
+            if (selectedSpinnerValue != null && medicalIssues.isNotEmpty() && address.isNotEmpty()) {
+                selectedTime = selectedSpinnerValue
+                fetchUserCnicAndBookAppointment(medicalIssues, address, selectedSpinnerValue)
 
                 // Clear all fields after booking
                 binding.editTextMedicalIssues.text.clear()
                 binding.editTextAddress.text.clear()
-                binding.etSelectDate.text.clear()
-                binding.etSelectTime.text.clear()
-                binding.textViewSelectedDate.text = ""
+//                binding.etSelectDate.text.clear()
+//                spinner.setSelection(0)
+                // Resets to "Select Time"
+//                binding.textViewSelectedDate.text = ""
                 binding.textViewSelectedTime.text = ""
 
                 // Reset internal variables
                 selectedDate = null
-                selectedTime = null
+//                selectedTime = null
 
                 // Show confirmation dialog and dismiss it after 5 seconds
                 showAppointmentAddedDialog()
@@ -90,7 +124,7 @@ class AppointmentActivity : AppCompatActivity() {
     }
 
     // Fetch the logged-in user's CNIC by matching their email in the users collection
-    private fun fetchUserCnicAndBookAppointment(medicalIssues: String, address: String) {
+    private fun fetchUserCnicAndBookAppointment(medicalIssues: String, address: String, time : String) {
         val userEmail = FirebaseAuth.getInstance().currentUser?.email
         if (userEmail != null) {
             // Fetch users where the user email matches the current user's email
@@ -103,7 +137,7 @@ class AppointmentActivity : AppCompatActivity() {
                                 val userCnic = userSnapshot.child("user_cnic").getValue(String::class.java)
                                 if (userCnic != null) {
                                     // User CNIC found, proceed with booking the appointment
-                                    bookAppointment(medicalIssues, address, userCnic)
+                                    bookAppointment(medicalIssues, address, userCnic, time)
                                     return
                                 }
                             }
@@ -123,18 +157,21 @@ class AppointmentActivity : AppCompatActivity() {
     }
 
     // Book the appointment with all required fields
-    private fun bookAppointment(medicalIssues: String, address: String, userCnic: String) {
+    private fun bookAppointment(medicalIssues: String, address: String, userCnic: String, time: String) {
         val appointmentId = database.push().key ?: return
         val key = generateRandomNumericId()
+        val today = getCurrentDate().toString()
+        println("Today is $today")
+
         fetchUserPhoneNumber { userName,phoneNum ->
             if(phoneNum != null && userName != null){
                 val appointment = Appointment(
                     user_test_appointment = medicalIssues,
                     user_cnic_appointment = userCnic,
-                    user_time_appointment = selectedTime ?: "",
+                    user_time_appointment = time ?: "",
                     user_name_appointment = userName,
                     user_key_appointment = key,
-                    user_date_appointment = selectedDate ?: "",
+                    user_date_appointment = today,
                     user_status_appointment = "P",  // Default to Pending
                     user_address_appointment = address,
                     user_number_appointment = phoneNum!!.toString()
@@ -148,6 +185,9 @@ class AppointmentActivity : AppCompatActivity() {
                         binding.buttonRefreshStatus.visibility = View.VISIBLE
                         currentAppointmentId = appointmentId
                         listenForAppointmentStatus(appointmentId)
+                        if (selectedTimeBook == "NB") {
+                            selectedTime?.let { updateTimeBookedToBByTimeId(it) }
+                        }
                     }
                     .addOnFailureListener {
                         Toast.makeText(this, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show()
@@ -162,6 +202,9 @@ class AppointmentActivity : AppCompatActivity() {
         return (1..8)
             .map { (0..9).random() }  // This generates a random number between 0 and 9
             .joinToString("")  // Join all the random numbers into a single string
+    }
+    private fun getCurrentDate(): LocalDate {
+        return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
     }
 
 
@@ -214,23 +257,7 @@ class AppointmentActivity : AppCompatActivity() {
         }
     }
 
-    // Open date picker dialog
-    private fun openDatePicker() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-            selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-            binding.textViewSelectedDate.text = "Selected Date: $selectedDate"
-            binding.etSelectDate.setText(selectedDate)
-            binding.etSelectDate.isFocusable = false
-            binding.etSelectDate.isClickable = false
-        }, year, month, day)
-
-        datePickerDialog.show()
-    }
     private fun fetchUserPhoneNumber(callback: (String?,String?) -> Unit) {
         val currentUserEmail = FirebaseHelper.getAuth().currentUser?.email
         if (currentUserEmail != null) {
@@ -265,23 +292,9 @@ class AppointmentActivity : AppCompatActivity() {
     }
 
 
-    // Open time picker dialog
+
     @SuppressLint("DefaultLocale", "SetTextI18n")
-    private fun openTimePicker() {
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
 
-        val timePickerDialog = TimePickerDialog(this, { _, selectedHour, selectedMinute ->
-            selectedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
-            binding.textViewSelectedTime.text = "Selected Time: $selectedTime"
-            binding.etSelectTime.setText(selectedTime)
-            binding.etSelectTime.isFocusable = false
-            binding.etSelectTime.isClickable = false
-        }, hour, minute, true)
-
-        timePickerDialog.show()
-    }
     private fun showAppointmentAddedDialog() {
         // Inflate the custom layout with Lottie animation and message
         val dialogView = layoutInflater.inflate(R.layout.dialog_appointment_added, null)
@@ -304,11 +317,113 @@ class AppointmentActivity : AppCompatActivity() {
         // Show the dialog
         builder.show()
 
-        // Dismiss the dialog after 2 seconds
+
         android.os.Handler(Looper.getMainLooper()).postDelayed({
             builder.dismiss()
-        }, 2000)  // 2000ms = 2 seconds
+            startActivity(Intent(this,MainActivity::class.java))
+        }, 1500)
+    // 2000ms = 2 seconds
+
     }
+    private fun loadTimeSlotsFromFirebase() {
+        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                timeSlotList.clear()
+                for (slotSnapshot in snapshot.children) {
+                    val slot = slotSnapshot.getValue(TimeSlot::class.java)
+                    if (slot != null) {
+                        if (slot.time_booked == "NB") {
+                            timeSlotList.add(slot)
+                        }
+                    }
+                }
+                // Sort by time
+                timeSlotList.sortBy { it.time_id }
+
+                val adapter = ArrayAdapter(this@AppointmentActivity, android.R.layout.simple_spinner_item, timeSlotList)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = adapter
+
+                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                        val selectedSlot = timeSlotList[position]
+                        selectedTime = selectedSlot.time
+                        selectedTimeId = selectedSlot.time_id
+                        selectedTimeBook= selectedSlot.time_booked
+                        Toast.makeText(this@AppointmentActivity, "Selected: $selectedTime", Toast.LENGTH_SHORT).show()
+
+                        if (selectedSlot.time_booked == "NB") {
+
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {}
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@AppointmentActivity, "Failed to load data", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun updateTimeBookedToBByTimeId(timeId: String) {
+        databaseRef.orderByChild("time").equalTo(timeId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (slotSnapshot in snapshot.children) {
+                        slotSnapshot.ref.child("time_booked").setValue("B")
+                            .addOnSuccessListener {
+                                Toast.makeText(this@AppointmentActivity, "Slot marked as booked", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this@AppointmentActivity, "Update failed", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@AppointmentActivity, "Failed to update", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun resetTimeSlotsIfAfterMidnight() {
+        // Step 1: Get current time in Asia/Karachi
+        val zoneId = ZoneId.of("Asia/Karachi")
+        val currentTime = ZonedDateTime.now(zoneId)
+
+        // Step 2: Define the reset time (12:01 AM)
+        val resetTime = currentTime.toLocalDate().atTime(0, 1).atZone(zoneId)
+
+        // Step 3: Check if current time is after reset time
+        if (currentTime.isAfter(resetTime)) {
+            val databaseRef = FirebaseDatabase.getInstance().getReference("timeslots")
+
+            databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (slotSnapshot in snapshot.children) {
+                        val timeId = slotSnapshot.getValue(TimeSlot::class.java)
+                        if (timeId != null) {
+                            if (timeId.time.isNullOrEmpty()) {
+                                val slotRef = databaseRef.child(timeId.time_id)
+                                slotRef.child("time_booked").setValue("NB")
+                            }
+                        }
+                    }
+                    Log.d("ResetSlots", "All time slots reset to NB.")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("ResetSlots", "Failed to reset time slots: ${error.message}")
+                }
+            })
+        }
+    }
+    private fun getMessage(input: String): String {
+        return input
+    }
+
 
 
 

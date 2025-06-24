@@ -71,13 +71,19 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
 
             <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:id="@+id/viewPager"
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:overScrollMode="never"
+                />
+
 
 
         </RelativeLayout>
@@ -291,13 +297,13 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/bloodpressure"
+                    android:src="@drawable/ic_ai_health"
                     android:contentDescription="Tooth Icon"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tests"
+                    android:text="Get Suggestions"
                     android:gravity="center_horizontal"
 
                     android:textColor="@color/black"

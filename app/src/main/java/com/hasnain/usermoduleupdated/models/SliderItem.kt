@@ -1,6 +1,8 @@
 package com.hasnain.usermoduleupdated.models
 
 data class SliderItem(
-    val image: Int,
-    val text: String
+    val title: String,
+    val description: String,
+    val buttonText: String,
+    val backgroundGradient: Int
 )

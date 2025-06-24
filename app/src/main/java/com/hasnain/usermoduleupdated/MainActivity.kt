@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_notifications -> {
                     loadFragment(ChatFragment())
-                    item.icon = ContextCompat.getDrawable(this, R.drawable.ic_tests_selected)
+                    item.icon = ContextCompat.getDrawable(this, R.drawable.ic_chat)
                     true
                 }
                 R.id.nav_profile -> {
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     private fun resetIconsToDefault() {
         binding.bottomNavigation.menu.findItem(R.id.nav_home).icon = ContextCompat.getDrawable(this, R.drawable.ic_home)
         binding.bottomNavigation.menu.findItem(R.id.nav_reports).icon = ContextCompat.getDrawable(this, R.drawable.ic_reports)
-        binding.bottomNavigation.menu.findItem(R.id.nav_notifications).icon = ContextCompat.getDrawable(this, R.drawable.ic_tests_selected)
+        binding.bottomNavigation.menu.findItem(R.id.nav_notifications).icon = ContextCompat.getDrawable(this, R.drawable.ic_chat)
         binding.bottomNavigation.menu.findItem(R.id.nav_profile).icon = ContextCompat.getDrawable(this, R.drawable.ic_user)
     }
 

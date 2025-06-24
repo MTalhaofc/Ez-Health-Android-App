@@ -95,4 +95,11 @@ dependencies {
 //    ksp("com.github.bumptech.glide:compiler:4.12.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
 //    implementation("com.chaquo.python:gradle:15.0.1")
+    implementation ("com.tbuonomo:dotsindicator:4.3")
+    implementation ("com.google.mlkit:text-recognition:16.0.0-beta5")
+    implementation ("org.tensorflow:tensorflow-lite:2.12.0")
+    implementation ("org.tensorflow:tensorflow-lite-support:0.4.2")
+    implementation ("com.google.android.material:material:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+
 }

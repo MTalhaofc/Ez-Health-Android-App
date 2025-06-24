@@ -38,15 +38,14 @@ class AppointmentAdapter(private val appointmentsList: List<Appointment>) :
         holder.addressAppointment?.text = appointment.user_address_appointment ?: "N/A"
         holder.statusAppointment?.text = when (appointment.user_status_appointment) {
             "P" -> "Status: Pending"
-            "T" -> "Status: Confirmed"
-            "R" -> "Status: Rejected"
-            "C" -> "Status: Completed"
+            "F" -> "Status: Not Completed"
+            "T" -> "Status: Completed"
             else -> "Status: Unknown"
         }
         holder.acceptedStatus?.setBackgroundColor(
             ContextCompat.getColor(
                 holder.itemView.context,
-                if (appointment.user_status_appointment == "T") R.color.Darkblue else R.color.gray
+                if (appointment.user_status_appointment == "P") R.color.Darkblue else R.color.gray
             )
         )
 
@@ -54,7 +53,7 @@ class AppointmentAdapter(private val appointmentsList: List<Appointment>) :
         holder.rejectedStatus?.setBackgroundColor(
             ContextCompat.getColor(
                 holder.itemView.context,
-                if (appointment.user_status_appointment == "R") R.color.red else R.color.gray
+                if (appointment.user_status_appointment == "F") R.color.red else R.color.gray
             )
         )
 
@@ -62,7 +61,7 @@ class AppointmentAdapter(private val appointmentsList: List<Appointment>) :
         holder.completedStatus?.setBackgroundColor(
             ContextCompat.getColor(
                 holder.itemView.context,
-                if (appointment.user_status_appointment == "C") R.color.Darkblue else R.color.gray
+                if (appointment.user_status_appointment == "T") R.color.Darkblue else R.color.gray
             )
         )
 

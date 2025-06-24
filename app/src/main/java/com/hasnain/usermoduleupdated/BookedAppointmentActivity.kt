@@ -42,7 +42,6 @@ class BookedAppointmentActivity : AppCompatActivity() {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 return false
             }
-
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val appointment = appointmentsList[position]
@@ -51,15 +50,14 @@ class BookedAppointmentActivity : AppCompatActivity() {
                 appointmentsList.removeAt(position)
                 appointmentAdapter.notifyItemRemoved(position)
 
-                // Delete item from Firebase database
-                val databaseReference = FirebaseDatabase.getInstance().getReference("appointments")
-                val appointmentKey =
-                    appointment.user_key_appointment
-                val appointmentcnic=appointment.user_cnic_appointment// Ensure the Appointment model has a `key` property for unique ID
+                val appointmentKey = appointment.user_key_appointment
 
                 if (appointmentKey != null) {
-                    FirebaseHelper.appointmentsRef.orderByChild("user_key_appointment").equalTo(appointmentKey)
-                        .get().addOnSuccessListener { snapshot ->
+                    FirebaseHelper.appointmentsRef
+                        .orderByChild("user_key_appointment")
+                        .equalTo(appointmentKey)
+                        .get()
+                        .addOnSuccessListener { snapshot ->
                             if (snapshot.exists()) {
                                 for (child in snapshot.children) {
                                     child.ref.removeValue().addOnSuccessListener {
@@ -68,7 +66,6 @@ class BookedAppointmentActivity : AppCompatActivity() {
                                             "Appointment deleted successfully",
                                             Toast.LENGTH_SHORT
                                         ).show()
-
                                     }.addOnFailureListener {
                                         Toast.makeText(
                                             this@BookedAppointmentActivity,
@@ -85,13 +82,143 @@ class BookedAppointmentActivity : AppCompatActivity() {
                                 ).show()
                             }
                         }.addOnFailureListener {
-                            Toast.makeText(this@BookedAppointmentActivity,
+                            Toast.makeText(
+                                this@BookedAppointmentActivity,
                                 "Failed to query database",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                 }
+
+                // Update time_booked to "NB"
+                val time_appt = appointment.user_time_appointment
+                FirebaseHelper.timeSlotRef
+                    .orderByChild("time")
+                    .equalTo(time_appt)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()) {
+                                for (child in snapshot.children) {
+                                    child.ref.child("time_booked").setValue("NB")
+                                        .addOnSuccessListener {
+                                            Toast.makeText(
+                                                this@BookedAppointmentActivity,
+                                                "Time slot marked as NB",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(
+                                                this@BookedAppointmentActivity,
+                                                "Failed to update time_booked",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                }
+                            } else {
+                                Toast.makeText(
+                                    this@BookedAppointmentActivity,
+                                    "No matching time slot found",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Toast.makeText(
+                                this@BookedAppointmentActivity,
+                                "Error updating time_booked: ${error.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
             }
+
+//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                val position = viewHolder.adapterPosition
+//                val appointment = appointmentsList[position]
+//
+//                // Remove item from RecyclerView
+//                appointmentsList.removeAt(position)
+//                appointmentAdapter.notifyItemRemoved(position)
+//
+//                // Delete item from Firebase database
+//                val databaseReference = FirebaseDatabase.getInstance().getReference("appointments")
+//                val appointmentKey =
+//                    appointment.user_key_appointment
+//                val appointmentcnic=appointment.user_cnic_appointment// Ensure the Appointment model has a `key` property for unique ID
+//
+//                if (appointmentKey != null) {
+//                    FirebaseHelper.appointmentsRef.orderByChild("user_key_appointment").equalTo(appointmentKey)
+//                        .get().addOnSuccessListener { snapshot ->
+//                            if (snapshot.exists()) {
+//                                for (child in snapshot.children) {
+//                                    child.ref.removeValue().addOnSuccessListener {
+//                                        Toast.makeText(
+//                                            this@BookedAppointmentActivity,
+//                                            "Appointment deleted successfully",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
+//
+//                                    }.addOnFailureListener {
+//                                        Toast.makeText(
+//                                            this@BookedAppointmentActivity,
+//                                            "Failed to delete appointment",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
+//                                    }
+//                                }
+//                            } else {
+//                                Toast.makeText(
+//                                    this@BookedAppointmentActivity,
+//                                    "No matching appointment found",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                            }
+//                        }.addOnFailureListener {
+//                            Toast.makeText(this@BookedAppointmentActivity,
+//                                "Failed to query database",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                }
+//                val time_appt = appointment.user_time_appointment
+//
+//                FirebaseHelper.timeSlotRef
+//                    .orderByChild("time")
+//                    .equalTo(time_appt)
+//                    .addListenerForSingleValueEvent(object : ValueEventListener {
+//                        override fun onDataChange(snapshot: DataSnapshot) {
+//                            if (snapshot.exists()) {
+//                                for (child in snapshot.children) {
+//                                    child.ref.child("time_booked").setValue("NB")
+//                                        .addOnSuccessListener {
+//                                            Toast.makeText(
+//                                                this@BookedAppointmentActivity,
+//                                                "Time slot marked as NB",
+//                                                Toast.LENGTH_SHORT
+//                                            ).show()
+//                                        }
+//                                        .addOnFailureListener {
+//                                            Toast.makeText(
+//                                                this@BookedAppointmentActivity,
+//                                                "Failed to update time_booked",
+//                                                Toast.LENGTH_SHORT
+//                                            ).show()
+//                                        }
+//                                }
+//                            } else {
+//                                Toast.makeText(
+//                                    this@BookedAppointmentActivity,
+//                                    "No matching time slot found",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                            }
+//                        }
+//
+//
+//                    }
+//            }
 
             override fun onChildDraw(
                 c: Canvas,

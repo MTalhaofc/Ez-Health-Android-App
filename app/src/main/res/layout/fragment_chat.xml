@@ -5,47 +5,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ECEFF1"
     android:padding="16dp"
-    android:background="#F5F5F5">
+    >
 
+    <!-- User Prompt Input -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/promptInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Enter your health question"
+        android:layout_marginTop="16dp"
+        android:hint="Ask your health question..."
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxStrokeColor="#2196F3"
         app:hintTextColor="@color/blue"
-        app:boxStrokeColor="@color/blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/promptInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="5"
             android:textColor="@android:color/black"
-            android:textColorHint="#757575" />
+            android:textColorHint="#9E9E9E"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Send Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitButton"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Ask"
+        android:layout_marginTop="8dp"
+        android:text="Send"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:backgroundTint="@color/blue"
+        android:icon="@drawable/ic_send"
+        android:backgroundTint="#2196F3"
+        app:cornerRadius="24dp"
+        app:layout_constraintTop_toBottomOf="@id/promptInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/promptInputLayout" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
+    <!-- Response Box -->
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:background="#F5F5F5"
         app:layout_constraintTop_toBottomOf="@id/submitButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,16 +73,18 @@
             android:orientation="vertical"
             android:padding="8dp">
 
+            <!-- Chat Bubble: Response -->
             <TextView
                 android:id="@+id/responseText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:elevation="2dp"
-                android:padding="12dp"
-                android:text="Response will appear here"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"/>
+                android:layout_margin="8dp"
+                android:background="@drawable/chatbot_bubble"
+                android:padding="16dp"
+                android:text="Your health assistant will reply here."
+                android:textColor="#212121"
+                android:textSize="16sp"
+                android:elevation="4dp"/>
         </LinearLayout>
     </ScrollView>
 

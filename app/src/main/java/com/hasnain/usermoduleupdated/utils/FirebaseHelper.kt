@@ -16,6 +16,7 @@ object FirebaseHelper {
     val appointmentsRef: DatabaseReference = database.getReference("appointments")
     val testsRef: DatabaseReference = database.getReference("tests")
     val profileRef: DatabaseReference = database.getReference("profile")
+    val timeSlotRef: DatabaseReference = database.getReference("timeslots")
 
     // Firebase Auth instance
     fun getAuth(): FirebaseAuth {
