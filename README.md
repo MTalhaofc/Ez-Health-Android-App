@@ -1,24 +1,130 @@
-<h2 align="center"><u>Ez Health Android App</u></h2>
 
-![Android App to Make your manage your Health Easy](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTDX0PowhxdQu8dfB_YgtUqDK6lFV2YveobQ&s)
-<h4 align="center"> Android App to Make your manage your Health Easy </h4>
+# 📱 Ez Health – Android Mobile App
 
-<p align="center">
-    <img src="https://img.shields.io/github/stars/MTalhaofc/Ez-Health-Android-App?style=for-the-badge&color=orange">
-    <img src="https://img.shields.io/github/forks/MTalhaofc/Ez-Health-Android-App?style=for-the-badge&color=purple">
-    <img src="https://img.shields.io/github/license/MTalhaofc/Ez-Health-Android-App?style=for-the-badge&color=blue">
-    <img src="https://img.shields.io/github/issues/MTalhaofc/Ez-Health-Android-App?style=for-the-badge&color=red">
-    <img src="https://img.shields.io/github/contributors/MTalhaofc/Ez-Health-Android-App?style=for-the-badge&color=cyan">
-<br>
-    <img src="https://img.shields.io/badge/Author-Muhammad Talha & Muhammad Mahad-magenta?style=flat-square">
-    <img src="https://img.shields.io/badge/Open%20Source-No-orange?style=flat-square">
-    <img src="https://img.shields.io/badge/Maintained-Yes-cyan?style=flat-square">
-    <img src="https://img.shields.io/badge/Made%20In-Pakistan-green?style=flat-square">
-    <img src="https://img.shields.io/badge/Written%20In-Kotlin, XML-blue?style=flat-square">
-<br>
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=MTalhaofc&repo=Ez-Health-Android-App&theme=synthwave">
-</p>
 
-### [+] Description
-🌟 EzHealth: Your ultimate health companion! 🌡️📋 With EzHealth, you can seamlessly manage all your medical reports 🗂️, book doctor appointments 🩺📅, and explore a wide range of diagnostic tests 🔬. Stay informed with health articles 📰 and get AI-generated summaries of your reports 🤖📄 for quick understanding. Monitor your wellness with the BMI calculator 📏⚖️ and access emergency services instantly 🚨📞. Designed to keep you in control of your health journey, EzHealth is your one-stop solution for smarter, healthier living! 💪
+---
+
+Ez Health is a smart Android application that empowers users to manage their health records, schedule appointments, receive nutrition advice, and access real-time health support — all in one place. The app integrates Firebase, AI recommendations, TensorFlow, and a chatbot for a modern, intelligent healthcare experience.
+
+---
+
+## 🚀 Features
+
+- 📄 Upload and view personal health reports
+- 🧠 AI-powered health recommendations
+- 🤖 Integrated chatbot using Google Gemini for health queries
+- 📅 Schedule and track appointments
+- ⚖️ Calculate BMI and monitor health goals
+- 🆘 Quick emergency call button
+- 🔒 Firebase Authentication & Realtime Sync
+- ☁️ Cloud Storage support for files (images & PDFs)
+
+---
+
+## 🧠 AI Modules
+
+| Module | Description |
+|--------|-------------|
+| **Chatbot** | Built using Google Gemini Kit to provide conversational health support and general queries |
+| **TensorFlow** | Used for health report image analysis and classification |
+| **Nutritionist Model** | Python-based backend model (Streamlit + pandas) generates diet plans |
+
+---
+
+
+---
+
+## 🛠 Tech Stack
+
+| Technology                                                                                                               | Description                                    |
+| ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge\&logo=kotlin\&logoColor=white)                  | Main language for Android development          |
+| ![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge\&logo=java\&logoColor=white)                        | Used in some legacy modules                    |
+| ![XML](https://img.shields.io/badge/XML-E44D26?style=for-the-badge\&logo=xml\&logoColor=white)                           | UI Layouts                                     |
+| ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge\&logo=firebase\&logoColor=black)            | Authentication, Realtime Database, and Storage |
+| ![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge\&logo=tensorflow\&logoColor=white)      | Report image analysis                          |
+| ![Google Gemini](https://img.shields.io/badge/Gemini%20Chatbot-4285F4?style=for-the-badge\&logo=google\&logoColor=white) | AI Chatbot integration                         |
+
+---
+
+## 📸 Screenshots
+
+| Login & Home                                         | Report Upload                                          | Chatbot                                                  | Recommendations                                                          |
+| ---------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------------------------------ |
+| ![Login](https://raw.githubusercontent.com/MTalhaofc/Ez-Health-Android-App/refs/heads/main/ChatGPT%20Image%20Jun%2015%2C%202025%2C%2003_20_35%20PM.png) | ![Upload](https://raw.githubusercontent.com/MTalhaofc/Ez-Health-Android-App/refs/heads/main/WhatsApp%20Image%202025-06-15%20at%202.41.45%20PM.jpeg) | ![Chatbot](https://raw.githubusercontent.com/MTalhaofc/Ez-Health-Android-App/refs/heads/main/WhatsApp%20Image%202025-06-15%20at%202.41.44%20PM.jpeg) | ![Recommendations](https://raw.githubusercontent.com/MTalhaofc/Ez-Health-Android-App/refs/heads/main/WhatsApp%20Image%202025-06-15%20at%202.41.48%20PM.jpeg) |
+
+---
+
+## 📂 Project Structure
+
+```bash
+EzHealthApp/
+├── app/
+│   ├── java/com/ezhealth/    # App logic in Kotlin
+│   ├── res/layout/           # UI screens (XML)
+│   └── AndroidManifest.xml
+├── firebase/                 # Firebase services
+├── tensorflow/               # TensorFlow model loading
+├── build.gradle
+└── README.md
+```
+
+---
+
+## ⚙️ Getting Started
+
+### 1️⃣ Clone the Repository
+
+```
+git clone https://github.com/your-username/ez-health-app.git
+cd ez-health-app
+```
+
+### 2️⃣ Open in Android Studio
+```
+* Open the project
+* Sync Gradle dependencies
+```
+### 3️⃣ Firebase Setup
+```
+* Add your `google-services.json` to `/app`
+* Enable Firebase Auth, Storage, and Realtime DB in your console
+```
+### 4️⃣ TensorFlow Setup
+```
+* Add your TFLite model under `/assets` folder
+* Load and run inference using Android TFLite Interpreter
+```
+### 5️⃣ Run the App
+
+```
+Run ▶️ in Android Studio
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+## 📬 Contact
+
+For any queries, feel free to reach out via [LinkedIn](https://www.linkedin.com/in/mtalhaofc/)
+
+---
+
+## ⭐ Support
+
+If you found this project useful or interesting, please consider giving it a ⭐ star and following me on GitHub for more cool projects!
+
+[![GitHub Follow](https://img.shields.io/github/followers/MTalhaofc?label=Follow&style=social)](https://github.com/MTalhaofc)
+
+---
+
+> ⚡ **Ez Health – Personalized health support in your pocket.**
+
+
+
 
